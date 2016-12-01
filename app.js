@@ -1,40 +1,34 @@
-//const yargs = require('yargs');
+const yargs = require('yargs');
 
-//
-//const geocode = require('./geocode/geocode.js');
-//
-//const argv = yargs
-//        .options({
-//            a: {
-//                demand: true,
-//                alias: 'address',
-//                describe: 'Address to fetch weather for',
-//                string: true
-//            }
-//        })
-//        .help()
-//        .alias('help', 'h')
-//        .argv;
-//
-//geocode.geocodeAddress(argv.address, (errorMessage, results) => {
-//    if (errorMessage){
-//        console.log(errorMessage);
-//    } else {
-//        console.log(JSON.stringify(results,undefined,2));
-//    }  
-//});
+const weather = require('./weather/weather.js');
+const geocode = require('./geocode/geocode.js');
 
-//3c60dc68105ef8a51caa436577f2a59e
+const argv = yargs
+        .options({
+            a: {
+                demand: true,
+                alias: 'address',
+                describe: 'Address to fetch weather for',
+                string: true
+            }
+        })
+        .help()
+        .alias('help', 'h')
+        .argv;
 
-const request = require('request');
-
-request({
-url: 'https://api.darksky.net/forecast/3c60dc68105ef8a51caa436577f2a59e/39.286427,-77.22901929999999',
-        json: true
-}, (error, response, body) => {
-if (!error && response.statusCode === 200) {
-console.log(body.currently.temperature);
-        } else {
-console.log('Unable to fetch weather.');
-        }
+geocode.geocodeAddress(argv.address, (errorMessage, results) => {
+    if (errorMessage) {
+        console.log(errorMessage);
+    } else {
+        console.log(results.address);
+        weather.getWeather(results.latitude, results.longitude, (errorMessage, weatherResults) => {
+            if (errorMessage) {
+                console.log(errorMessage);
+            } else {
+                console.log("It's currently " + weatherResults.temperature + ". It feels like " + weatherResults.apparentTemperature);
+            }
         });
+    }
+});
+
+//lat, lng, callback
