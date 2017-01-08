@@ -8,5 +8,5 @@ A console based app that retrieves current weather conditions utilizing Node.js 
 
 install dependancies using <code>$npm install</code>
 
-issue request by <code>$node app.js -a (ZIP CODE)</code>
+issue request by <code>$node app.js --a (ZIP CODE)</code>
 
